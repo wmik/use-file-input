@@ -1,13 +1,23 @@
 import React, { type CSSProperties } from 'react';
-import { render, screen } from '@testing-library/react';
+import { render, screen, fireEvent } from '@testing-library/react';
 import { userEvent } from '@testing-library/user-event';
 import { useFileInput } from '../src/index';
 
-const LABEL_TEXT = 'Click or drag/drop files to upload';
+const LABEL_TEXT_DEFAULT = 'Click or drag/drop files to upload';
 const PLACEHOLDER_TEXT = 'No files';
+const LABEL_TEXT_HOVER = 'Drop files to upload';
 
 function FileInputComponent() {
-  let { fileInputRef, files, onFileInputChange } = useFileInput();
+  let {
+    files,
+    fileInputRef,
+    isDraggingOver,
+    onFileInputChange,
+    onFileInputDragStart,
+    onFileInputDragOver,
+    onFileInputDragLeave,
+    onFileInputDrop
+  } = useFileInput();
   let hasFiles = Array.from(files?.values() ?? [])?.length > 0;
 
   let styles: Record<string, CSSProperties> = {
@@ -16,6 +26,7 @@ function FileInputComponent() {
       height: 400,
       border: '1px dashed #dddccc'
     },
+    label: {},
     input: {
       display: 'none'
     },
@@ -29,8 +40,18 @@ function FileInputComponent() {
 
   return (
     <main>
-      <div style={styles.container}>
-        <label htmlFor="files" children={LABEL_TEXT} />
+      <div
+        style={styles.container}
+        onDragLeave={onFileInputDragLeave}
+        onDragOver={onFileInputDragOver}
+        onDragStart={onFileInputDragStart}
+        onDrop={onFileInputDrop}
+      >
+        <label
+          htmlFor="files"
+          children={isDraggingOver ? LABEL_TEXT_HOVER : LABEL_TEXT_DEFAULT}
+          style={styles.label}
+        />
         <input
           name="files"
           id="files"
@@ -65,7 +86,7 @@ function FileInputComponent() {
 describe('integration tests', () => {
   it('should render the component correctly', () => {
     render(<FileInputComponent />);
-    expect(screen.getByText(LABEL_TEXT)).toBeInTheDocument();
+    expect(screen.getByText(LABEL_TEXT_DEFAULT)).toBeInTheDocument();
   });
 
   it('should upload files correctly', async () => {
@@ -76,7 +97,7 @@ describe('integration tests', () => {
 
     render(<FileInputComponent />);
 
-    let input = screen.getByLabelText(LABEL_TEXT) as HTMLInputElement;
+    let input = screen.getByLabelText(LABEL_TEXT_DEFAULT) as HTMLInputElement;
     let placeholder = screen.getByText(PLACEHOLDER_TEXT);
 
     expect(input).toBeInTheDocument();
@@ -91,6 +112,49 @@ describe('integration tests', () => {
 
     expect(upload).toBe(file);
     expect(screen.getByText(upload?.name)).toBeInTheDocument();
+
+    let button = screen.getByText('DELETE');
+
+    expect(button).toBeInTheDocument();
+
+    await user.click(button);
+
+    expect(placeholder).toHaveStyle({ display: 'block' });
+  });
+
+  it('should upload files via drag n drop correctly', async () => {
+    let user = userEvent.setup();
+    let file = new File(['lorem ipsum dolor sit amet'], 'test.txt', {
+      type: 'text/plain'
+    });
+
+    let { container } = render(<FileInputComponent />);
+
+    let dropzone = container.querySelector('div') as HTMLDivElement;
+    let label = screen.getByText(LABEL_TEXT_DEFAULT);
+    let input = screen.getByLabelText(LABEL_TEXT_DEFAULT) as HTMLInputElement;
+    let placeholder = screen.getByText(PLACEHOLDER_TEXT);
+
+    expect(input).toBeInTheDocument();
+    expect(label).toBeInTheDocument();
+    expect(placeholder).toBeInTheDocument();
+    expect(label).toHaveTextContent(LABEL_TEXT_DEFAULT);
+
+    await user.hover(dropzone);
+
+    let setData = vi.fn();
+
+    fireEvent.dragStart(dropzone, { dataTransfer: { files: [file], setData } });
+    fireEvent.dragOver(dropzone, { dataTransfer: { files: [file], setData } });
+
+    expect(label).toHaveTextContent(LABEL_TEXT_HOVER);
+    expect(setData).toHaveBeenCalledOnce();
+
+    fireEvent.drop(dropzone, { dataTransfer: { files: [file], setData } });
+    fireEvent.dragLeave(dropzone);
+
+    expect(placeholder).toHaveStyle({ display: 'none' });
+    expect(screen.getByText(file?.name)).toBeInTheDocument();
 
     let button = screen.getByText('DELETE');
 

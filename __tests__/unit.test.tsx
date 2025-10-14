@@ -2,9 +2,9 @@ import { renderHook } from '@testing-library/react';
 import { useFileInput } from '../src/index';
 
 describe('unit tests', () => {
-  let api = renderHook(() => useFileInput());
-
   it('should export properties correctly', () => {
+    let api = renderHook(() => useFileInput());
+
     expect(api.result.current).toHaveProperty('fileInputRef');
     expect(api.result.current).toHaveProperty('isDraggingOver');
     expect(api.result.current).toHaveProperty('onFileInputChange');

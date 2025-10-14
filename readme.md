@@ -23,12 +23,13 @@ function FileInputComponent() {
   let { fileInputRef, files, onFileInputChange } = useFileInput();
   let hasFiles = Array.from(files?.values() ?? [])?.length > 0;
 
-  let styles: Record<string, CSSProperties> = {
+  let styles = {
     container: {
       width: 400,
       height: 400,
       border: '1px dashed #dddccc'
     },
+    label: {},
     input: {
       display: 'none'
     },
@@ -43,14 +44,14 @@ function FileInputComponent() {
   return (
     <main>
       <div style={styles.container}>
-        <label htmlFor="files" children={LABEL_TEXT} />
+        <label htmlFor="files" children={LABEL_TEXT} style={styles.label} />
         <input
-          name="files"
-          id="files"
+          multiple
           type="file"
+          id="files"
+          name="files"
           ref={fileInputRef}
           style={styles.input}
-          multiple
           onChange={onFileInputChange}
         />
       </div>
@@ -84,9 +85,10 @@ Creates a custom file input object.
 
 #### `Parameters` (FileInputProps)
 
-| Property | Type       | Description         |
-| -------- | ---------- | ------------------- |
-| id       | `function` | Custom ID generator |
+| Property | Type       | Description                   |
+| -------- | ---------- | ----------------------------- |
+| id       | `function` | Custom ID generator           |
+| ref      | `object`   | Custom React reference object |
 
 > _**NOTE**: **\*** means it is required_
 
@@ -94,7 +96,6 @@ Creates a custom file input object.
 
 | Property             | Type       | Description                                          |
 | -------------------- | ---------- | ---------------------------------------------------- |
-| id                   | `function` | Custom ID generator                                  |
 | isDraggingOver       | `boolean`  | Dragging state                                       |
 | onFileInputChange    | `function` | HTML change event handler                            |
 | onFileInputDragStart | `function` | HTML dragstart event handler                         |
@@ -102,15 +103,15 @@ Creates a custom file input object.
 | onFileInputDragOver  | `function` | HTML dragover event handler                          |
 | onFileInputDrop      | `function` | HTML drop event handler                              |
 | fileInputRef         | `object`   | React referencing object for HTMLInputElement        |
-| files                | `object`   | Map-like object for file I/O operations              |
-| files.get            | `function` | Method to get a file from the cache                  |
-| files.set            | `function` | Method to add a file to the cache                    |
-| files.delete         | `function` | Method to add a remove a file from the cache         |
-| files.clear          | `function` | Method to add a remove all files from the cache      |
-| files.keys           | `function` | Method to list identifiers in the cache              |
-| files.values         | `function` | Method to list files in the cache                    |
-| files.entries        | `function` | Method to list identifier-file pairs in the cache    |
-| files.has            | `function` | Method to check if an identifier exists in the cache |
+| files                | `object`   | Map-like object for file cache I/O operations        |
+| {files}.get          | `function` | Method to get a file from the cache                  |
+| {files}.set          | `function` | Method to add a file to the cache                    |
+| {files}.delete       | `function` | Method to add a remove a file from the cache         |
+| {files}.clear        | `function` | Method to add a remove all files from the cache      |
+| {files}.keys         | `function` | Method to list identifiers in the cache              |
+| {files}.values       | `function` | Method to list files in the cache                    |
+| {files}.entries      | `function` | Method to list identifier-file pairs in the cache    |
+| {files}.has          | `function` | Method to check if an identifier exists in the cache |
 
 ## License
 
