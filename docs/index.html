@@ -1,0 +1,388 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>wmik/use-file-input - React File Input Hooks</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Nunito:ital,wght@0,200..1000;1,200..1000&display=swap"
+    rel="stylesheet">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    @keyframes pulse-glow {
+
+      0%,
+      100% {
+        opacity: 0.3;
+        transform: scale(1);
+      }
+
+      50% {
+        opacity: 0.5;
+        transform: scale(1.1);
+      }
+    }
+
+    .animate-pulse-glow {
+      animation: pulse-glow 4s ease-in-out infinite;
+    }
+
+    @keyframes fade-in {
+      from {
+        opacity: 0;
+        transform: translateY(10px);
+      }
+
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .animate-fade-in {
+      animation: fade-in 0.6s ease-out;
+    }
+  </style>
+</head>
+
+<body class="bg-gradient-to-br from-slate-950 via-blue-950 to-slate-900 text-white min-h-screen font-[Nunito]">
+  <!-- Animated background elements -->
+  <div class="fixed inset-0 overflow-hidden pointer-events-none">
+    <div class="absolute top-1/4 left-1/4 w-96 h-96 bg-blue-500/10 rounded-full blur-3xl animate-pulse-glow"></div>
+    <div class="absolute bottom-1/4 right-1/4 w-96 h-96 bg-purple-500/10 rounded-full blur-3xl animate-pulse-glow"
+      style="animation-delay: 1s;"></div>
+  </div>
+
+  <!-- Header -->
+  <header class="relative z-10 container mx-auto px-6 pt-8 pb-4">
+    <nav class="flex items-center justify-between">
+      <div class="flex items-center gap-2">
+        <svg class="w-8 h-8 text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+            d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12"></path>
+        </svg>
+        <span class="text-xl font-bold bg-gradient-to-r from-blue-400 to-purple-400 bg-clip-text text-transparent">
+          wmik / use-file-input
+        </span>
+      </div>
+      <div class="flex gap-4">
+        <a href="https://github.com/wmik/use-file-input"
+          class="px-4 py-2 rounded-lg border border-white/20 hover:bg-white/10 transition-all">
+          GitHub
+        </a>
+        <a href="https://github.com/wmik/use-file-input"
+          class="px-4 py-2 rounded-lg bg-blue-500 hover:bg-blue-600 transition-all">
+          Docs
+        </a>
+      </div>
+    </nav>
+  </header>
+
+  <!-- Hero Section -->
+  <section class="relative z-10 container mx-auto px-6 pt-20 pb-32">
+    <div class="max-w-4xl mx-auto text-center">
+      <div
+        class="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-blue-500/20 border border-blue-400/30 mb-8 animate-fade-in">
+        <svg class="w-4 h-4 text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path>
+        </svg>
+        <span class="text-sm text-blue-300">React File Input Hooks</span>
+      </div>
+
+      <h1 class="text-6xl md:text-7xl font-bold mb-6 leading-tight">
+        File uploads made
+        <span class="bg-gradient-to-r from-blue-400 via-purple-400 to-pink-400 bg-clip-text text-transparent">
+          elegant
+        </span>
+      </h1>
+
+      <p class="text-xl text-slate-300 mb-12 max-w-2xl mx-auto">
+        A powerful, headless React hook for file inputs with drag-and-drop support.
+        Build beautiful file upload experiences with complete control.
+      </p>
+
+      <!-- Install Command -->
+      <div class="max-w-2xl mx-auto mb-12">
+        <div
+          class="bg-slate-900/50 backdrop-blur-sm border border-slate-700 rounded-xl p-6 flex items-center justify-between group hover:border-blue-400/50 transition-all">
+          <code class="text-blue-300 text-lg">npm install @wmik/use-file-input</code>
+          <button onclick="copyToClipboard()" class="p-2 rounded-lg hover:bg-white/10 transition-all"
+            aria-label="Copy install command">
+            <svg id="copy-icon" class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z">
+              </path>
+            </svg>
+            <svg id="check-icon" class="w-5 h-5 text-green-400 hidden" fill="none" stroke="currentColor"
+              viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+            </svg>
+          </button>
+        </div>
+      </div>
+
+      <!-- CTA Buttons -->
+      <div class="flex gap-4 justify-center flex-wrap">
+        <a href="#demo"
+          class="px-8 py-4 rounded-xl bg-gradient-to-r from-blue-500 to-purple-500 hover:from-blue-600 hover:to-purple-600 font-semibold text-lg transition-all transform hover:scale-105 shadow-lg shadow-blue-500/50">
+          Try Demo
+        </a>
+        <!-- <a href="#features"
+          class="px-8 py-4 rounded-xl border border-white/20 hover:bg-white/10 font-semibold text-lg transition-all">
+          Learn More
+        </a> -->
+      </div>
+    </div>
+  </section>
+
+  <!-- Features Grid -->
+  <section id="features" class="relative z-10 container mx-auto px-6 py-20">
+    <div class="max-w-6xl mx-auto">
+      <h2 class="text-4xl font-bold text-center mb-16">
+        Everything you need, nothing you don't
+      </h2>
+
+      <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
+        <div
+          class="feature-card p-6 rounded-2xl border bg-slate-900/30 border-slate-700 hover:border-slate-600 transition-all">
+          <div class="w-12 h-12 rounded-xl bg-blue-500/20 flex items-center justify-center mb-4 text-blue-400">
+            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                d="M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4"></path>
+            </svg>
+          </div>
+          <h3 class="text-xl font-semibold mb-2">Familiar API</h3>
+          <p class="text-slate-400">Extends the Map API with minimal abstraction, making it incredibly easy to use and
+            integrate.</p>
+        </div>
+
+        <div
+          class="feature-card p-6 rounded-2xl border bg-slate-900/30 border-slate-700 hover:border-slate-600 transition-all">
+          <div class="w-12 h-12 rounded-xl bg-blue-500/20 flex items-center justify-center mb-4 text-blue-400">
+            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                d="M15 15l-2 5L9 9l11 4-5 2zm0 0l5 5M7.188 2.239l.777 2.897M5.136 7.965l-2.898-.777M13.95 4.05l-2.122 2.122m-5.657 5.656l-2.12 2.122">
+              </path>
+            </svg>
+          </div>
+          <h3 class="text-xl font-semibold mb-2">Drag & Drop</h3>
+          <p class="text-slate-400">Native HTML5 Drag and Drop API support built right in, no extra configuration
+            needed.</p>
+        </div>
+
+        <div
+          class="feature-card p-6 rounded-2xl border bg-slate-900/30 border-slate-700 hover:border-slate-600 transition-all">
+          <div class="w-12 h-12 rounded-xl bg-blue-500/20 flex items-center justify-center mb-4 text-blue-400">
+            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z">
+              </path>
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path>
+            </svg>
+          </div>
+          <h3 class="text-xl font-semibold mb-2">Configurable</h3>
+          <p class="text-slate-400">Flexible settings that adapt to your specific requirements and use cases.</p>
+        </div>
+
+        <div
+          class="feature-card p-6 rounded-2xl border bg-slate-900/30 border-slate-700 hover:border-slate-600 transition-all">
+          <div class="w-12 h-12 rounded-xl bg-blue-500/20 flex items-center justify-center mb-4 text-blue-400">
+            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                d="M7 21a4 4 0 01-4-4V5a2 2 0 012-2h4a2 2 0 012 2v12a4 4 0 01-4 4zm0 0h12a2 2 0 002-2v-4a2 2 0 00-2-2h-2.343M11 7.343l1.657-1.657a2 2 0 012.828 0l2.829 2.829a2 2 0 010 2.828l-8.486 8.485M7 17h.01">
+              </path>
+            </svg>
+          </div>
+          <h3 class="text-xl font-semibold mb-2">Headless UI</h3>
+          <p class="text-slate-400">Build your own custom interface that perfectly matches your design system.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Code Example -->
+  <section class="relative z-10 container mx-auto px-6 py-20">
+    <div class="max-w-4xl mx-auto">
+      <h2 class="text-4xl font-bold text-center mb-16">Simple, intuitive API</h2>
+
+      <div class="bg-slate-900/50 backdrop-blur-sm border border-slate-700 rounded-2xl p-8 overflow-x-auto">
+        <pre class="text-sm text-slate-300">
+          <code class="text-sm leading-relaxed">
+<span class="text-purple-400">import</span> { <span class="text-blue-300">useFileInput</span> } <span
+  class="text-purple-400">from</span> <span class="text-green-400">'@wmik/use-file-input'</span>;
+  
+<span class="text-purple-400">function</span> <span class="text-yellow-300">FileInputComponent</span><span class="text-gray-300">() {</span>
+  <span class="text-purple-400">const</span> <span class="text-blue-300">LABEL_TEXT_DEFAULT</span> <span class="text-pink-400">=</span> <span class="text-green-400">'Click or drag/drop files to upload'</span><span class="text-gray-300">;</span>
+  <span class="text-purple-400">const</span> <span class="text-blue-300">LABEL_TEXT_HOVER</span> <span class="text-pink-400">=</span> <span class="text-green-400">'Drop files to upload'</span><span class="text-gray-300">;</span>
+  <span class="text-purple-400">const</span> <span class="text-blue-300">PLACEHOLDER_TEXT</span> <span class="text-pink-400">=</span> <span class="text-green-400">'No files'</span><span class="text-gray-300">;</span>
+
+  <span class="text-purple-400">let</span> <span class="text-gray-300">{ 
+    files,
+    fileInputRef,
+    isDraggingOver,
+    onFileInputChange,
+    onFileInputDragStart,
+    onFileInputDragOver,
+    onFileInputDragLeave,
+    onFileInputDrop
+   } =</span> <span class="text-yellow-300">useFileInput</span><span class="text-gray-300">();</span>
+  <span class="text-purple-400">let</span> <span class="text-gray-300">hasFiles =</span> <span class="text-blue-300">Array</span><span class="text-gray-300">.</span><span class="text-yellow-300">from</span><span class="text-gray-300">(files?.</span><span class="text-yellow-300">values</span><span class="text-gray-300">() ??</span> <span class="text-gray-300">[])?.</span><span class="text-blue-300">length</span> <span class="text-pink-400">></span> <span class="text-orange-400">0</span><span class="text-gray-300">;</span>
+
+  <span class="text-purple-400">let</span> <span class="text-gray-300">styles = {</span>
+    <span class="text-blue-300">container</span><span class="text-gray-300">: {</span>
+      <span class="text-blue-300">width</span><span class="text-gray-300">:</span> <span class="text-orange-400">400</span><span class="text-gray-300">,</span>
+      <span class="text-blue-300">height</span><span class="text-gray-300">:</span> <span class="text-orange-400">400</span><span class="text-gray-300">,</span>
+      <span class="text-blue-300">border</span><span class="text-gray-300">:</span> <span class="text-green-400">'1px dashed #dddccc'</span>
+    <span class="text-gray-300">},</span>
+    <span class="text-blue-300">label</span><span class="text-gray-300">: {},</span>
+    <span class="text-blue-300">input</span><span class="text-gray-300">: {</span>
+      <span class="text-blue-300">display</span><span class="text-gray-300">:</span> <span class="text-green-400">'none'</span>
+    <span class="text-gray-300">},</span>
+    <span class="text-blue-300">list</span><span class="text-gray-300">: {</span>
+      <span class="text-blue-300">display</span><span class="text-gray-300">: hasFiles ?</span> <span class="text-green-400">'block'</span> <span class="text-gray-300">:</span> <span class="text-green-400">'none'</span>
+    <span class="text-gray-300">},</span>
+    <span class="text-blue-300">placeholder</span><span class="text-gray-300">: {</span>
+      <span class="text-blue-300">display</span><span class="text-gray-300">: !hasFiles ?</span> <span class="text-green-400">'block'</span> <span class="text-gray-300">:</span> <span class="text-green-400">'none'</span>
+    <span class="text-gray-300">}</span>
+  <span class="text-gray-300">};</span>
+
+  <span class="text-purple-400">return</span> <span class="text-gray-300">(</span>
+    <span class="text-gray-400">&lt;</span><span class="text-red-400">main</span><span class="text-gray-400">&gt;</span>
+      <span class="text-gray-400">&lt;</span><span class="text-red-400">div</span>
+        <span class="text-cyan-400">style</span><span class="text-pink-400">=</span><span class="text-gray-300">{styles.container}</span>
+        <span class="text-cyan-400">onDragOver</span><span class="text-pink-400">=</span><span class="text-gray-300">{onFileInputDragOver}</span>
+        <span class="text-cyan-400">onDragStart</span><span class="text-pink-400">=</span><span class="text-gray-300">{onFileInputDragStart}</span>
+        <span class="text-cyan-400">onDragLeave</span><span class="text-pink-400">=</span><span class="text-gray-300">{onFileInputDragLeave}</span>
+        <span class="text-cyan-400">onDrop</span><span class="text-pink-400">=</span><span class="text-gray-300">{onFileInputDrop}</span>
+      <span class="text-gray-400">&gt;</span>
+        <span class="text-gray-400">&lt;</span><span class="text-red-400">label</span>
+          <span class="text-cyan-400">htmlFor</span><span class="text-pink-400">=</span><span class="text-green-400">"files"</span>
+          <span class="text-cyan-400">style</span><span class="text-pink-400">=</span><span class="text-gray-300">{styles.label}</span>
+          <span class="text-cyan-400">children</span><span class="text-pink-400">=</span><span class="text-gray-300">{isDraggingOver ? LABEL_TEXT_HOVER : LABEL_TEXT_DEFAULT}</span>
+        <span class="text-gray-400">/&gt;</span>
+        <span class="text-gray-400">&lt;</span><span class="text-red-400">input</span>
+          <span class="text-cyan-400">multiple</span>
+          <span class="text-cyan-400">id</span><span class="text-pink-400">=</span><span class="text-green-400">"files"</span>
+          <span class="text-cyan-400">type</span><span class="text-pink-400">=</span><span class="text-green-400">"file"</span>
+          <span class="text-cyan-400">name</span><span class="text-pink-400">=</span><span class="text-green-400">"files"</span>
+          <span class="text-cyan-400">ref</span><span class="text-pink-400">=</span><span class="text-gray-300">{fileInputRef}</span>
+          <span class="text-cyan-400">style</span><span class="text-pink-400">=</span><span class="text-gray-300">{styles.input}</span>
+          <span class="text-cyan-400">onChange</span><span class="text-pink-400">=</span><span class="text-gray-300">{onFileInputChange}</span>
+        <span class="text-gray-400">/&gt;</span>
+      <span class="text-gray-400">&lt;/</span><span class="text-red-400">div</span><span class="text-gray-400">&gt;</span>
+
+      <span class="text-gray-400">&lt;</span><span class="text-red-400">ul</span> <span class="text-cyan-400">style</span><span class="text-pink-400">=</span><span class="text-gray-300">{styles.list}</span><span class="text-gray-400">&gt;</span>
+        <span class="text-gray-300">{</span><span class="text-blue-300">Array</span><span class="text-gray-300">.</span><span class="text-yellow-300">from</span><span class="text-gray-300">(files.</span><span class="text-yellow-300">values</span><span class="text-gray-300">())?.</span><span class="text-yellow-300">map</span><span class="text-gray-300">(</span><span class="text-orange-300">file</span> <span class="text-purple-400">=&gt;</span> <span class="text-gray-300">(</span>
+          <span class="text-gray-400">&lt;</span><span class="text-red-400">li</span> <span class="text-cyan-400">key</span><span class="text-pink-400">=</span><span class="text-gray-300">{file?.name}</span><span class="text-gray-400">&gt;</span>
+            <span class="text-gray-400">&lt;</span><span class="text-red-400">span</span> <span class="text-cyan-400">children</span><span class="text-pink-400">=</span><span class="text-gray-300">{file?.name}</span> <span class="text-gray-400">/&gt;</span>
+            <span class="text-gray-400">&lt;</span><span class="text-red-400">button</span>
+              <span class="text-cyan-400">type</span><span class="text-pink-400">=</span><span class="text-green-400">"button"</span>
+              <span class="text-cyan-400">aria-roledescription</span><span class="text-pink-400">=</span><span class="text-green-400">"delete"</span>
+              <span class="text-cyan-400">onClick</span><span class="text-pink-400">=</span><span class="text-gray-300">{() =&gt; files.</span><span class="text-yellow-300">delete</span><span class="text-gray-300">(file)}</span>
+            <span class="text-gray-400">&gt;</span>
+              DELETE
+            <span class="text-gray-400">&lt;/</span><span class="text-red-400">button</span><span class="text-gray-400">&gt;</span>
+          <span class="text-gray-400">&lt;/</span><span class="text-red-400">li</span><span class="text-gray-400">&gt;</span>
+        <span class="text-gray-300">))}</span>
+      <span class="text-gray-400">&lt;/</span><span class="text-red-400">ul</span><span class="text-gray-400">&gt;</span>
+
+      <span class="text-gray-400">&lt;</span><span class="text-red-400">p</span> <span class="text-cyan-400">style</span><span class="text-pink-400">=</span><span class="text-gray-300">{styles.placeholder}</span> <span class="text-cyan-400">children</span><span class="text-pink-400">=</span><span class="text-gray-300">{PLACEHOLDER_TEXT}</span> <span class="text-gray-400">/&gt;</span>
+    <span class="text-gray-400">&lt;/</span><span class="text-red-400">main</span><span class="text-gray-400">&gt;</span>
+  <span class="text-gray-300">);</span>
+<span class="text-gray-300">}</span>
+      </code>
+    </pre>
+      </div>
+    </div>
+  </section>
+
+  <!-- Stats Section -->
+  <section class="relative z-10 container mx-auto px-6 py-20">
+    <div class="max-w-4xl mx-auto">
+      <div class="grid md:grid-cols-3 gap-8 text-center">
+        <div class="p-8 rounded-2xl bg-slate-900/30 border border-slate-700">
+          <div class="text-4xl font-bold text-blue-400 mb-2">~3KB</div>
+          <div class="text-slate-400">Minified + Gzipped</div>
+        </div>
+        <div class="p-8 rounded-2xl bg-slate-900/30 border border-slate-700">
+          <div class="text-4xl font-bold text-purple-400 mb-2">0</div>
+          <div class="text-slate-400">Dependencies</div>
+        </div>
+        <div class="p-8 rounded-2xl bg-slate-900/30 border border-slate-700">
+          <div class="text-4xl font-bold text-pink-400 mb-2">100%</div>
+          <div class="text-slate-400">TypeScript</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CTA Section -->
+  <section class="relative z-10 container mx-auto px-6 py-32">
+    <div class="max-w-4xl mx-auto text-center">
+      <h2 class="text-5xl font-bold mb-6">Ready to get started?</h2>
+      <p class="text-xl text-slate-300 mb-12">
+        Install the package and start building better file upload experiences today.
+      </p>
+      <a href="https://github.com/wmik/use-file-input"
+        class="inline-block px-8 py-4 rounded-xl bg-gradient-to-r from-blue-500 to-purple-500 hover:from-blue-600 hover:to-purple-600 font-semibold text-lg transition-all transform hover:scale-105 shadow-lg shadow-blue-500/50">
+        View on GitHub
+      </a>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="relative z-10 container mx-auto px-6 py-8 border-t border-slate-800">
+    <div class="flex flex-col md:flex-row justify-between items-center gap-4">
+      <div class="flex items-center gap-2">
+        <svg class="w-6 h-6 text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+            d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12"></path>
+        </svg>
+        <span class="font-semibold">wmik / use-file-input</span>
+      </div>
+      <div class="text-slate-400 text-sm">
+        MIT © 2025 • Built with React
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    function copyToClipboard() {
+      navigator.clipboard.writeText('npm install @wmik/use-file-input');
+      const copyIcon = document.getElementById('copy-icon');
+      const checkIcon = document.getElementById('check-icon');
+
+      copyIcon.classList.add('hidden');
+      checkIcon.classList.remove('hidden');
+
+      setTimeout(() => {
+        copyIcon.classList.remove('hidden');
+        checkIcon.classList.add('hidden');
+      }, 2000);
+    }
+
+    // Animate feature cards on scroll
+    const featureCards = document.querySelectorAll('.feature-card');
+    let currentIndex = 0;
+
+    function highlightFeature() {
+      featureCards.forEach((card, index) => {
+        if (index === currentIndex) {
+          card.classList.remove('bg-slate-900/30', 'border-slate-700');
+          card.classList.add('bg-gradient-to-br', 'from-blue-500/20', 'to-purple-500/20', 'border-blue-400/50', 'scale-105');
+        } else {
+          card.classList.add('bg-slate-900/30', 'border-slate-700');
+          card.classList.remove('bg-gradient-to-br', 'from-blue-500/20', 'to-purple-500/20', 'border-blue-400/50', 'scale-105');
+        }
+      });
+      currentIndex = (currentIndex + 1) % featureCards.length;
+    }
+
+    setInterval(highlightFeature, 3000);
+  </script>
+</body>
+
+</html>

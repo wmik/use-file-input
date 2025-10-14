@@ -1,4 +1,5 @@
 __tests__/
+docs/
 src/
 rollup.config.js
 tsconfig.json

@@ -17,7 +17,8 @@
 
 ```jsx
 function FileInputComponent() {
-  const LABEL_TEXT = 'Click or drag/drop files to upload';
+  const LABEL_TEXT_DEFAULT = 'Click or drag/drop files to upload';
+  const LABEL_TEXT_HOVER = 'Drop files to upload';
   const PLACEHOLDER_TEXT = 'No files';
 
   let { fileInputRef, files, onFileInputChange } = useFileInput();
@@ -43,12 +44,22 @@ function FileInputComponent() {
 
   return (
     <main>
-      <div style={styles.container}>
-        <label htmlFor="files" children={LABEL_TEXT} style={styles.label} />
+      <div
+        style={styles.container}
+        onDragOver={onFileInputDragOver}
+        onDragStart={onFileInputDragStart}
+        onDragLeave={onFileInputDragLeave}
+        onDrop={onFileInputDrop}
+      >
+        <label
+          htmlFor="files"
+          style={styles.label}
+          children={isDraggingOver ? LABEL_TEXT_HOVER : LABEL_TEXT_DEFAULT}
+        />
         <input
           multiple
-          type="file"
           id="files"
+          type="file"
           name="files"
           ref={fileInputRef}
           style={styles.input}

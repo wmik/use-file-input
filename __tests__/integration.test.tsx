@@ -4,8 +4,8 @@ import { userEvent } from '@testing-library/user-event';
 import { useFileInput } from '../src/index';
 
 const LABEL_TEXT_DEFAULT = 'Click or drag/drop files to upload';
-const PLACEHOLDER_TEXT = 'No files';
 const LABEL_TEXT_HOVER = 'Drop files to upload';
+const PLACEHOLDER_TEXT = 'No files';
 
 function FileInputComponent() {
   let {
@@ -42,23 +42,23 @@ function FileInputComponent() {
     <main>
       <div
         style={styles.container}
-        onDragLeave={onFileInputDragLeave}
         onDragOver={onFileInputDragOver}
         onDragStart={onFileInputDragStart}
+        onDragLeave={onFileInputDragLeave}
         onDrop={onFileInputDrop}
       >
         <label
           htmlFor="files"
-          children={isDraggingOver ? LABEL_TEXT_HOVER : LABEL_TEXT_DEFAULT}
           style={styles.label}
+          children={isDraggingOver ? LABEL_TEXT_HOVER : LABEL_TEXT_DEFAULT}
         />
         <input
-          name="files"
+          multiple
           id="files"
           type="file"
+          name="files"
           ref={fileInputRef}
           style={styles.input}
-          multiple
           onChange={onFileInputChange}
         />
       </div>
