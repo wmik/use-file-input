@@ -21,13 +21,23 @@ function FileInputComponent() {
   const LABEL_TEXT_HOVER = 'Drop files to upload';
   const PLACEHOLDER_TEXT = 'No files';
 
-  let { fileInputRef, files, onFileInputChange } = useFileInput();
+  let {
+    files,
+    fileInputRef,
+    isDraggingOver,
+    onFileInputChange,
+    onFileInputDragStart,
+    onFileInputDragOver,
+    onFileInputDragLeave,
+    onFileInputDrop
+  } = useFileInput();
   let hasFiles = Array.from(files?.values() ?? [])?.length > 0;
 
   let styles = {
     container: {
       width: 400,
       height: 400,
+      padding: 8,
       border: '1px dashed #dddccc'
     },
     label: {},
@@ -50,6 +60,7 @@ function FileInputComponent() {
         onDragStart={onFileInputDragStart}
         onDragLeave={onFileInputDragLeave}
         onDrop={onFileInputDrop}
+        onClick={() => fileInputRef?.current?.click()}
       >
         <label
           htmlFor="files"
@@ -90,7 +101,7 @@ function FileInputComponent() {
 
 ## API
 
-### _`useFileInput` (Default export)_
+### _`useFileInput`_
 
 Creates a custom file input object.
 
@@ -105,24 +116,24 @@ Creates a custom file input object.
 
 #### `Returns` (FileInputHookObject)
 
-| Property             | Type       | Description                                          |
-| -------------------- | ---------- | ---------------------------------------------------- |
-| isDraggingOver       | `boolean`  | Dragging state                                       |
-| onFileInputChange    | `function` | HTML change event handler                            |
-| onFileInputDragStart | `function` | HTML dragstart event handler                         |
-| onFileInputDragLeave | `function` | HTML dragleave event handler                         |
-| onFileInputDragOver  | `function` | HTML dragover event handler                          |
-| onFileInputDrop      | `function` | HTML drop event handler                              |
-| fileInputRef         | `object`   | React referencing object for HTMLInputElement        |
-| files                | `object`   | Map-like object for file cache I/O operations        |
-| {files}.get          | `function` | Method to get a file from the cache                  |
-| {files}.set          | `function` | Method to add a file to the cache                    |
-| {files}.delete       | `function` | Method to add a remove a file from the cache         |
-| {files}.clear        | `function` | Method to add a remove all files from the cache      |
-| {files}.keys         | `function` | Method to list identifiers in the cache              |
-| {files}.values       | `function` | Method to list files in the cache                    |
-| {files}.entries      | `function` | Method to list identifier-file pairs in the cache    |
-| {files}.has          | `function` | Method to check if an identifier exists in the cache |
+| Property             | Type                    | Description                                          |
+| -------------------- | ----------------------- | ---------------------------------------------------- |
+| files                | `object`                | Map-like object for file cache I/O operations        |
+| {files}.get          | `function(key: string)` | Method to get a file from the cache                  |
+| {files}.set          | `function(file: File)`  | Method to add a file to the cache                    |
+| {files}.delete       | `function(key: string)` | Method to remove a file from the cache               |
+| {files}.has          | `function(key: string)` | Method to check if an identifier exists in the cache |
+| {files}.clear        | `function`              | Method to remove all files from the cache            |
+| {files}.keys         | `function`              | Method to list identifiers in the cache              |
+| {files}.values       | `function`              | Method to list files in the cache                    |
+| {files}.entries      | `function`              | Method to list identifier-file pairs in the cache    |
+| fileInputRef         | `object`                | React referencing object for HTMLInputElement        |
+| isDraggingOver       | `boolean`               | Dragging state                                       |
+| onFileInputChange    | `function(event)`       | HTML change event handler                            |
+| onFileInputDragStart | `function(event)`       | HTML dragstart event handler                         |
+| onFileInputDragLeave | `function(event)`       | HTML dragleave event handler                         |
+| onFileInputDragOver  | `function(event)`       | HTML dragover event handler                          |
+| onFileInputDrop      | `function(event)`       | HTML drop event handler                              |
 
 ## License
 

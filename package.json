@@ -1,6 +1,6 @@
 {
   "name": "@wmik/use-file-input",
-  "version": "1.0.0-alpha.0",
+  "version": "1.0.0-alpha.1",
   "main": "dist/index.cjs.js",
   "module": "dist/index.esm.js",
   "types": "dist/index.d.ts",
@@ -17,7 +17,7 @@
   ],
   "repository": {
     "type": "git",
-    "url": "https://github.com/wmik/use-file-input.git"
+    "url": "git+https://github.com/wmik/use-file-input.git"
   },
   "bugs": "https://github.com/wmik/use-file-input/issues",
   "author": "wmik <contact@wmik.me>",
